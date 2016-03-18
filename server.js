@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var redirect = require("express-redirect");
 var routes = require('./app/routes/index.js');
 var mongoose = require('mongoose');
 var passport = require('passport');
