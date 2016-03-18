@@ -27,7 +27,7 @@ module.exports = function(app, passport) {
     .get(function(req, res) {
     	res.sendFile(path + '/public/index.html');
     });
-  app.route('/:id')
+  app.route('/:id') // '/:href(.+)'
     .get(function(req, res) {
       var short = req.params.id;
       console.log(short);
@@ -47,7 +47,7 @@ module.exports = function(app, passport) {
     	
     });
 
-app.route('/new/:url*')
+app.route('/new/:url(*)') // allow forward slashes in route: http://stackoverflow.com/a/24366031
   .get(function(req, res) {
     var query = req.params.url;
     console.log(query);
@@ -86,7 +86,9 @@ function returnFull (urlID){
 function hasHTTP(x){
   var http = "http://";
   var https = "https://";
-  if (x.substring(0, 7) != http || x.substring(0, 8) != https){
+  console.log(x.substring(0, 7))
+  console.log(x.substring(0, 8))
+  if (x.substring(0, 7) != http && x.substring(0, 8) != https){
     
     x = http + x;
   }
