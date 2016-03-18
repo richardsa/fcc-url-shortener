@@ -3,14 +3,14 @@
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   src: local('Roboto'), local('Roboto-Regular'), url('../fonts/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   src: local('Roboto Medium'), local('Roboto-Medium'), url('../fonts/Roboto-Medium.ttf') format('truetype');
 }
 
@@ -34,10 +34,10 @@ p {
 	margin: 8px 0 0 0;
 }
 
-.container p {
+/*.container p {
 	text-align: center;
 	padding: 0;
-}
+}*/
 
 /****** Header Styling ******/
 
