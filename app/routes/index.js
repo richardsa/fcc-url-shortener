@@ -3,12 +3,15 @@
 var path = process.cwd();
 var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
 //var timeHandler = require(path + '/app/controllers/timekHandler.server.js');
+// establish mongoose connection
+var mongoose = require('mongoose');
+var url = process.env.MONGO_URI;
 
-var baseURL = "https://url-shortener-richardsa.c9users.io/";
+var baseURL = 'https://desolate-reef-39739.herokuapp.com';
 var isObj = true;
 var urls = {
-  "https://www.google.com": "https://url-shortener-richardsa.c9users.io/0",
-  "http://freecodecamp.com/news": "https://url-shortener-richardsa.c9users.io/1"
+  "https://www.google.com": baseURL + "/0",
+  "http://freecodecamp.com/news": baseURL + "/1"
 };
 var id = 2;
 var answer;
