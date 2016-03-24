@@ -7,11 +7,11 @@ var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
 var mongoose = require('mongoose');
 var url = process.env.MONGO_URI;
 
-var baseURL = 'https://desolate-reef-39739.herokuapp.com';
+var baseURL = 'https://desolate-reef-39739.herokuapp.com/';
 var isObj = true;
 var urls = {
-  "https://www.google.com": baseURL + "/0",
-  "http://freecodecamp.com/news": baseURL + "/1"
+  "https://www.google.com": baseURL + "0",
+  "http://freecodecamp.com/news": baseURL + "1"
 };
 var id = 2;
 var answer;
@@ -20,21 +20,11 @@ var notIn = {
 };
 module.exports = function(app, passport) {
 
-  /*	function isLoggedIn (req, res, next) {
-  		if (req.isAuthenticated()) {
-  			return next();
-  		} else {
-  			res.redirect('/timestamp');
-  		}
-  	}*/
-
-
-  var clickHandler = new ClickHandler();
-
   app.route('/')
     .get(function(req, res) {
       res.sendFile(path + '/public/index.html');
     });
+    
   app.route('/:id') // '/:href(.+)'
     .get(function(req, res) {
       var short = req.params.id;
@@ -44,8 +34,6 @@ module.exports = function(app, passport) {
       } else {
         answer = hasHTTP(answer);
         res.redirect(answer);
-        // req.url = "www.reddit.com";
-        //res.send(answer);
         return res.end();
       }
 
