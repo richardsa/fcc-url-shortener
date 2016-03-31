@@ -5,11 +5,11 @@ function UrlHandler() {
   var Counters = require('../models/counters.js');
   var counterID;
   var baseURL = 'https://desolate-reef-39739.herokuapp.com/';
-  var shortened;
+  var shortened = baseURL + 0;
   var notIn = {
     "error": "No short url found for given input"
   };
-  
+
   // add http:// to beginning of url before storing it in database
   // necessary for proper redirects
   function hasHTTP(x) {
@@ -25,7 +25,7 @@ function UrlHandler() {
   // if already exists, existing combination will be displayed after querying database
   // if unique, will be added to database and results will be returned
   // invalid url's will return an error message
-  
+
   this.getShortened = function(req, res) {
     /*idCounter += 1;
     var short = baseURL + idCounter;*/
@@ -36,42 +36,31 @@ function UrlHandler() {
     // valid url reg ex taken from http://stackoverflow.com/a/3890175
     if (/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim.test(query) || /(^|[^\/])(www\.[\S]+(\b|$))/gim.test(query)) {
       query = hasHTTP(query);
-// insert counterval if does not exists 
-// added since initial counter variable was reset after restarting server
+      // insert counterval if does not exists 
+      // added since initial counter variable was reset after restarting server
       Counters.collection.findOne({}, clickProjection, function(err, result) {
         if (err) {
           throw err;
         }
 
-        if (result === null)  {
+        if (result) {
+          console.log(result);
+          counterID = result["counterVal"];
+
+        } else {
+
           Counters.collection.insert({
-            'counterVal': 0
+            'counterVal': 1
           }, function(err) {
             if (err) {
               throw err;
-          }
+            }
 
-            
+
           });
         }
       });
 
-
-    /*  Counters.collection.findAndModify({}, {
-        '_id': 1
-      }, {
-        $inc: {
-          'counterVal': 1
-        }
-      }, function(err, updatedResult) {
-        if (err) {
-          throw err;
-        }
-        counterID = updatedResult.value.counterVal;
-      //  console.log("last " + testing);
-    });*/
-
-      
       Urls.collection.findOne({
         "original_url": query
       }, clickProjection, function(err, result) {
@@ -83,7 +72,7 @@ function UrlHandler() {
           console.log("1 " + JSON.stringify(result));
           res.send(result);
         } else {
-          
+
           Counters.collection.findAndModify({}, {
             '_id': 1
           }, {
@@ -96,28 +85,53 @@ function UrlHandler() {
             }
             counterID = updatedResult.value.counterVal;
             shortened = baseURL + counterID;
-            console.log(shortened);
-          //  console.log("last " + testing);
-          });
+            console.log("counterID " + counterID);
+            console.log("shortend valude " + shortened);
+            console.log("outsie shodrtened " + shortened)
+            Urls.collection.insert({
+              "original_url": query,
+              "short_url": shortened
 
-          Urls.collection.insert({
-            "original_url": query,
-            "short_url": shortened
-            
-          }, function(err) {
-            if (err) {
-              throw err;
-            }
-
+            }, function(err) {
+              if (err) {
+                throw err;
+              }
+              //  return shortened;
+              //  console.log("last " + testing);
+            });
+            /*console.log("outsie shodrtened " + shortened)
+            Urls.collection.insert({
+              "original_url": query,
+              "short_url": shortened
+              
+            }, function(err) {
+              if (err) {
+                throw err;
+              } */
             Urls.collection.findOne({
               "original_url": query
             }, clickProjection, function(err, doc) {
               if (err) {
                 throw err;
               }
+              console.log("doc " + doc["short_url"]);
+
               console.log("2 " + JSON.stringify(doc));
               res.send(doc);
             });
+
+
+            /*  Urls.collection.findOne({
+                "original_url": query
+              }, clickProjection, function(err, doc) {
+                if (err) {
+                  throw err;
+                }
+                console.log("doc " + doc["short_url"]);
+              
+                console.log("2 " + JSON.stringify(doc));
+                res.send(doc);
+              });*/
           });
         }
       });
